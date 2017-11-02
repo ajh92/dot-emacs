@@ -1,0 +1,6 @@
+#Use whitelist
+*
+
+!.gitignore
+!init.el
+!custom.el
