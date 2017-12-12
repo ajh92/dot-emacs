@@ -4,4 +4,5 @@
 !.gitignore
 !init.el
 !custom.el
-!/config/**/*.el
+!config/
+!config/**/*
