@@ -14,13 +14,13 @@
 ;;; F#
 (use-package fsharp-mode
   :ensure t
-  :configure (progn
-	       (setq inferior-fsharp-program "fsharpi --readline-")
-	       (setq fsharp-compiler "fsharpc")))
+  :config (progn
+	    (setq inferior-fsharp-program "fsharpi --readline-")
+	    (setq fsharp-compiler "fsharpc")))
 
 
 ;;; Ocaml
-(use-package taureg
+(use-package tuareg
   :ensure t)
 
 (use-package merlin
@@ -69,10 +69,9 @@
 
 
 ;;; TeX
-(require 'tex)
 
-(use-package auctex
-  :ensure t
+(use-package tex
+  :ensure auctex
   :init (progn
 	  (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 	  (add-hook 'TeX-mode-hook
