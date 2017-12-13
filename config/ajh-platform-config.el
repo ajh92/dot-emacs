@@ -33,5 +33,13 @@
        (add-to-list 'TeX-view-program-selection '(output-pdf "Sumatra PDF"))))
   )
 
+;;; Linux
+(if (and (eq window-system 'x) (string-equal system-type "gnu/linux"))
+    (set-face-attribute 'default nil
+                    :family "Ubuntu Mono"
+                    :height 140
+                    :weight 'normal
+                    :width 'normal))
+
 (provide 'ajh-platform-config)
 ;;; ajh-platform-config.el ends here

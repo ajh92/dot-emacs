@@ -6,7 +6,10 @@
 ;;; Basic options
 (setq inhibit-splash-screen t)
 
+(display-time-mode 1)
+
 (setq tool-bar-mode nil)
+(setq menu-bar-mode nil)
 
 (setq split-width-threshold nil)
 
