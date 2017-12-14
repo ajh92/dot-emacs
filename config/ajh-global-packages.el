@@ -79,5 +79,22 @@
 (use-package multiple-cursors
   :ensure t)
 
+
+;;; Docker
+(use-package docker
+  :ensure t)
+
+(use-package docker-api
+  :ensure t)
+
+(use-package docker-compose
+  :ensure t)
+
+(use-package docker-tramp
+  :ensure t)
+
+(use-package dockerfile-mode
+  :ensure t)
+
 (provide 'ajh-global-packages)
 ;;; ajh-global-packages.el ends here
