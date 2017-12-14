@@ -14,12 +14,15 @@
 
 ;;; Windows NT
 (when (string-equal system-type "windows-nt")
-
   (defun my-semantic-hook ()
     (semantic-add-system-include "C:/tools/mingw64/x86_64-w64-mingw32/include/" 'c-mode)
     (semantic-add-system-include "C:/tools/mingw64/x86_64-w64-mingw32/include/" 'c++-mode))
   (add-hook 'semantic-init-hooks 'my-semantic-hook)
-
+  (set-face-attribute 'default nil
+		      :family "Consolas"
+		      :height 130
+		      :weight 'normal
+		      :width 'normal)
   (require 'tramp)
   (set-default 'tramp-default-method "plink")
 
