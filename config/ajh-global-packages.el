@@ -95,7 +95,7 @@
 (use-package docker-api
   :ensure t)
 
-(use-package docker-compose
+(use-package docker-compose-mode
   :ensure t)
 
 (use-package docker-tramp
