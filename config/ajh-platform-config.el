@@ -35,11 +35,14 @@
 
 ;;; Linux
 (if (and (eq window-system 'x) (string-equal system-type "gnu/linux"))
-    (set-face-attribute 'default nil
-                    :family "Ubuntu Mono"
-                    :height 140
+    (progn (set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 130
                     :weight 'normal
-                    :width 'normal))
+                    :width 'normal)
+	   (setq elpy-rpc-python-command "python3")
+	   (setq python-shell-interpreter "ipython3")
+	   (elpy-use-ipython "ipython3")))
 
 (provide 'ajh-platform-config)
 ;;; ajh-platform-config.el ends here

@@ -43,12 +43,7 @@
 ;;; Python
 (use-package elpy
   :ensure t
-  :config (progn
-	    (elpy-enable)
-	    (setq elpy-rpc-python-command "/usr/local/bin/python3")
-	    (setq python-shell-interpreter "ipython"
-		  python-shell-interpreter-args "--simple-prompt -i")
-	    (elpy-use-ipython)))
+  :config (elpy-enable))
 
 (use-package epc
   :ensure t)

@@ -8,8 +8,8 @@
 
 (display-time-mode 1)
 
-(setq tool-bar-mode nil)
-(setq menu-bar-mode nil)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 
 (setq split-width-threshold nil)
 
