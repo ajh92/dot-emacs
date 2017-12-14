@@ -30,7 +30,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (docker-compose docker docker-api docker-compose-mode docker-tramp dockerfile-mode which-key utop use-package undo-tree tuareg robe rainbow-delimiters pythonic multiple-cursors monokai-theme merlin magit fsharp-mode flyspell-correct-ivy epc elpy counsel company-auctex cider aggressive-indent ace-jump-mode))))
+    (avy-zap zop-up-to-char avy docker-compose docker docker-api docker-compose-mode docker-tramp dockerfile-mode which-key utop use-package undo-tree tuareg robe rainbow-delimiters pythonic multiple-cursors monokai-theme merlin magit fsharp-mode flyspell-correct-ivy epc elpy counsel company-auctex cider aggressive-indent ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

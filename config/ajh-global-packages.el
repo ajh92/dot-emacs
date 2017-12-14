@@ -9,12 +9,20 @@
   :init (which-key-mode)
   :config (setq which-key-idle-delay 0.6))
 
+
+
 (use-package multiple-cursors
   :ensure t)
 
-(use-package ace-jump-mode
+(use-package avy
   :ensure t
-  :bind ("C-=" . ace-jump-mode))
+  :bind ("C-=" . avy-goto-char))
+
+(use-package avy-zap
+  :ensure t
+  :bind (("M-z" . avy-zap-up-to-char-dwim)
+	 ("M-Z" . avy-zap-to-char-dwim))
+  :config (setq avy-zap-dwim-prefer-avy nil))
 
 (use-package magit
   :ensure t
