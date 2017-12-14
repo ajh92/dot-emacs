@@ -19,6 +19,17 @@
 	    (setq fsharp-compiler "fsharpc")))
 
 
+;;; Javascript
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+
+;;; Markdown
+(use-package markdown-mode
+  :ensure t
+  :config(progn (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+		 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))))
+
+
 ;;; Ocaml
 (use-package tuareg
   :ensure t)

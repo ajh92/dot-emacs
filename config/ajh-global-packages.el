@@ -104,5 +104,8 @@
 (use-package dockerfile-mode
   :ensure t)
 
+(use-package edbi
+  :ensure t)
+
 (provide 'ajh-global-packages)
 ;;; ajh-global-packages.el ends here

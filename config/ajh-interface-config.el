@@ -16,7 +16,13 @@
 (setq visible-bell nil) ;; The default
 (setq ring-bell-function 'ignore)
 
-(global-linum-mode 1)
+(use-package nlinum
+  :ensure t
+  :config (global-nlinum-mode 1))
+
+(use-package wc-mode
+  :ensure t)
+  
 
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
