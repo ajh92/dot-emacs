@@ -19,6 +19,14 @@
 	    (setq fsharp-compiler "fsharpc")))
 
 
+;;; Fish
+(use-package fish-mode
+  :ensure t)
+
+(use-package fish-completion
+  :ensure t)
+
+
 ;;; Javascript
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
