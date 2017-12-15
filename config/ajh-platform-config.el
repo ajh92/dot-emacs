@@ -39,8 +39,8 @@
 ;;; Linux
 (if (and (eq window-system 'x) (string-equal system-type "gnu/linux"))
     (progn (set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height 130
+                    :family "Ubuntu Mono"
+                    :height 140
                     :weight 'normal
                     :width 'normal)
 	   (setq elpy-rpc-python-command "python3")
