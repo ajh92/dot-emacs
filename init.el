@@ -14,13 +14,12 @@
   (concat (file-name-directory (or load-file-name buffer-file-name)) @file-relative-path)
   )
 
-(load (ajh-get-fullpath "config/ajh-package-config"))
+(load (ajh-get-fullpath "config/ajh-package-config.el"))
 (load (ajh-get-fullpath "config/ajh-global-packages.el"))
 (load (ajh-get-fullpath "config/ajh-interface-config.el"))
 (load (ajh-get-fullpath "config/ajh-language-config.el"))
 (load (ajh-get-fullpath "config/ajh-misc-config.el"))
 (load (ajh-get-fullpath "config/ajh-platform-config.el"))
 (load (ajh-get-fullpath "config/ajh-work-config.el"))
-
 (provide 'init)
 ;;; init.el ends here

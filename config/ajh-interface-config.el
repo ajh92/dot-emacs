@@ -11,6 +11,8 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
+(show-paren-mode 1)
+
 (setq split-width-threshold nil)
 
 (setq visible-bell nil) ;; The default
