@@ -62,7 +62,9 @@
 ;;; Python
 (use-package elpy
   :ensure t
-  :config (elpy-enable))
+  :config (progn
+	    (elpy-enable)
+	    (setq elpy-rpc-backend "jedi")))
 
 (use-package epc
   :ensure t)

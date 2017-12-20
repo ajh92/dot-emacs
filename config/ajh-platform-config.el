@@ -44,6 +44,7 @@
                     :weight 'normal
                     :width 'normal)
 	   (setq elpy-rpc-python-command "python3")
+	   (setq elpy
 	   (setq python-shell-interpreter "ipython3")
 	   (elpy-use-ipython "ipython3")))
 
