@@ -80,13 +80,21 @@
 (use-package inf-ruby
   :ensure t)
 
-(use-package enh-ruby-mode
+(use-package ruby-electric
   :ensure t)
 
-(add-to-list 'auto-mode-alist
-             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+(use-package seeing-is-believing
+  :ensure t)
 
-(add-hook 'enh-ruby-mode-hook 'robe-mode)
+(use-package rvm
+  :ensure t)
+
+(rvm-use-default)
+
+(add-to-list 'auto-mode-alist
+             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . ruby-mode))
+
+(add-hook 'ruby-mode-hook 'robe-mode)
 (push 'company-robe company-backends)
 
 
