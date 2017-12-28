@@ -27,5 +27,8 @@
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(setq flyspell-issue-message-flag nil)
+
 (provide 'ajh-misc-config)
 ;;; ajh-misc-config.el ends here
