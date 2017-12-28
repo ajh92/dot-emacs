@@ -97,6 +97,8 @@
 (add-hook 'ruby-mode-hook 'robe-mode)
 (push 'company-robe company-backends)
 
+(add-hook 'ruby-mode-hook 'highlight-indentation-mode)
+
 
 ;;; TeX
 
