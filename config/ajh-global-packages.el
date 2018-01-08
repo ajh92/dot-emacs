@@ -44,7 +44,6 @@
   :ensure t
   :init (global-company-mode)
   :config (progn
-	   (setq company-idle-delay .01)
 	   (setq company-minimum-prefix-length 2)
 	   (add-hook 'after-init-hook 'global-company-mode)
 	   ))
