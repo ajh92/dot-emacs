@@ -3,6 +3,11 @@
 ;;; Code
 
 
+;;; Angular (Framework -- not really a language)
+(use-package ng2-mode
+  :ensure t)
+
+
 ;;; Clojure
 (use-package cider
   :ensure t)
@@ -67,6 +72,18 @@
   :config (progn
 	    (elpy-enable)
 	    (setq elpy-rpc-backend "jedi")))
+
+(defadvice realgud:pdb (before gud-query-cmdline activate)
+  "Provide a better default command line when called interactively."
+  (interactive
+   (list (gud-query-cmdline (make-symbol "python -m pdb")
+   	 		    (file-name-nondirectory buffer-file-name)))))
+
+(defadvice pdb (before gud-query-cmdline activate)
+  "Provide a better default command line when called interactively."
+  (interactive
+   (list (gud-query-cmdline (make-symbol "python -m pdb")
+   	 		    (file-name-nondirectory buffer-file-name)))))
 
 (use-package epc
   :ensure t)
@@ -242,6 +259,33 @@
       (kill-buffer (current-buffer))))
   (insert (decode-coding-string bibtex-entry 'utf-8))
   (bibtex-fill-entry))
+
+
+;;; Typescript
+(use-package tide
+  :ensure t
+  :config (progn
+	    (defun setup-tide-mode ()
+	      (interactive)
+	      (tide-setup)
+	      (flycheck-mode +1)
+	      (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	      (eldoc-mode +1)
+	      (tide-hl-identifier-mode +1)
+	      ;; company is an optional dependency. You have to
+	      ;; install it separately via package-install
+	      ;; `M-x package-install [ret] company`
+	      (company-mode +1))
+
+	    ;; aligns annotation to the right hand side
+	    (setq company-tooltip-align-annotations t)
+
+	    ;; formats the buffer before saving
+	    (add-hook 'before-save-hook 'tide-format-before-save)
+
+	    (add-hook 'typescript-mode-hook #'setup-tide-mode)
+	    )
+  )
 
 (provide 'ajh-language-config)
 ;;; ajh-language-config.el ends here
