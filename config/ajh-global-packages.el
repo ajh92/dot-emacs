@@ -50,12 +50,16 @@
 
 (use-package company-edbi
   :ensure t
-  :config (add-to-list 'company-backends 'company-edbi))
+  :config (progn
+	    (add-to-list 'company-backends 'company-edbi)
+	    ))
 
 (use-package company-quickhelp
   :ensure t
   :config (progn
-	    (company-quickhelp-mode 1)))
+	    (company-quickhelp-mode 1)
+	    (setq company-quickhelp-delay 0.1)
+	    ))
 
   (use-package ivy
     :ensure t
@@ -108,6 +112,10 @@
 
 (use-package edbi
   :ensure t)
+
+(use-package realgud
+  :ensure t
+  :init (load-library "realgud"))
 
 (provide 'ajh-global-packages)
 ;;; ajh-global-packages.el ends here

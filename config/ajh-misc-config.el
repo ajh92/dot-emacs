@@ -30,5 +30,7 @@
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (setq flyspell-issue-message-flag nil)
 
-(provide 'ajh-misc-config)
+(global-aggressive-indent-mode 1)
+
+ (provide 'ajh-misc-config)
 ;;; ajh-misc-config.el ends here

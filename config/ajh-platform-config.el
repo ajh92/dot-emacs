@@ -34,6 +34,8 @@
     '(progn
        (assq-delete-all 'output-pdf TeX-view-program-selection)
        (add-to-list 'TeX-view-program-selection '(output-pdf "Sumatra PDF"))))
+  (setq python-shell-interpreter "ipython")
+  (elpy-use-ipython "ipython")
   )
 
 ;;; Linux
