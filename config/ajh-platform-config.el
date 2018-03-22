@@ -34,9 +34,8 @@
     '(progn
        (assq-delete-all 'output-pdf TeX-view-program-selection)
        (add-to-list 'TeX-view-program-selection '(output-pdf "Sumatra PDF"))))
-  (setq python-shell-interpreter "ipython")
-  (elpy-use-ipython "ipython")
-  )
+  (setq python-shell-interpreter "jupyter"
+	python-shell-interpreter-args "console --simple-prompt"))
 
 ;;; Linux
 (if (string-equal system-type "gnu/linux")
@@ -47,8 +46,8 @@
 			  :weight 'normal
 			  :width 'normal)
       (setq elpy-rpc-python-command "python3")
-      (setq python-shell-interpreter "ipython3")
-      (elpy-use-ipython "ipython3")))
+      (setq python-shell-interpreter "ipython3"
+	    python-shell-interpreter-args "-i --simple-prompt")))
 
-(provide 'ajh-platform-config)
+      (provide 'ajh-platform-config)
 ;;; ajh-platform-config.el ends here
