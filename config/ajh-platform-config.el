@@ -41,8 +41,8 @@
 (if (string-equal system-type "gnu/linux")
     (progn
       (set-face-attribute 'default nil
-			  :family "Ubuntu Mono"
-			  :height 140
+			  :family "Inconsolata"
+			  :height 100
 			  :weight 'normal
 			  :width 'normal)
       (setq elpy-rpc-python-command "python3")

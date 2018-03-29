@@ -23,3 +23,17 @@
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (tide company-auctex auctex rvm seeing-is-believing ruby-electric robe pythonic elpy utop merlin tuareg markdown-mode js2-mode fish-completion fish-mode fsharp-mode cider ng2-mode counsel monokai-theme wc-mode nlinum realgud dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flyspell-correct-ivy flycheck rainbow-delimiters yasnippet ivy company-quickhelp company-edbi company undo-tree magit avy-zap avy multiple-cursors which-key use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
