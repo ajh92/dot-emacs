@@ -37,9 +37,9 @@
 (use-package ispell
   :ensure t
   :config (progn
-	   (setq ispell-program-name "aspell")
-	   (setq ispell-dictionary "american")))
-
+	    (setq ispell-program-name
+		  (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
+	    (setq ispell-dictionary "american")))
 (use-package company
   :ensure t
   :init (global-company-mode)

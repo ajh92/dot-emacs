@@ -25,6 +25,7 @@
 		      :width 'normal)
   (require 'tramp)
   (set-default 'tramp-default-method "plink")
+  (add-to-list 'exec-path "C:/hunspell/bin")
 
   (setq python-environment-default-root-name "windows")
 
