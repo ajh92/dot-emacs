@@ -581,9 +581,10 @@
   (set-default 'tramp-default-method "plink")
   (add-to-list 'exec-path "C:/hunspell/bin")
 
+  ;; Improve magit performance
   (progn
-    (setq exec-path (add-to-list 'exec-path "C:/Program Files (x86)/Git/bin"))
-    (setenv "PATH" (concat "C:\\Program Files (x86)\\Git\\bin;" (getenv "PATH"))))
+    (setq exec-path (add-to-list 'exec-path "C:/Program Files/Git/bin"))
+    (setenv "PATH" (concat "C:\\Program Files\\Git\\bin;" (getenv "PATH"))))
 
   (setq python-environment-default-root-name "windows")
 
