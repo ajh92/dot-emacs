@@ -59,7 +59,9 @@
 (use-package magit
   :ensure t
   :bind(("C-c m" . magit-status))
-  :config (setq magit-completing-read-function 'ivy-completing-read))
+  :config (progn
+	    (setq magit-completing-read-function 'ivy-completing-read)
+	    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)))
 
 (use-package undo-tree
   :ensure t
@@ -601,8 +603,8 @@
 (if (string-equal system-type "gnu/linux")
     (progn
       (set-face-attribute 'default nil
-			  :family "Inconsolata"
-			  :height 100
+			  :family "Ubuntu Mono"
+			  :height 120
 			  :weight 'normal
 			  :width 'normal)
       (setq elpy-rpc-python-command "python3")
@@ -610,3 +612,17 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (company-restclient restclient uuidgen web-mode which-key wc-mode vue-mode utop use-package tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-vue lsp-ui js2-mode fsharp-mode flyspell-correct-ivy flymake-easy fish-mode fish-completion evil elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-edbi company-auctex cider avy-zap aggressive-indent))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
