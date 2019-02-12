@@ -522,8 +522,6 @@
 
 
 ;;; Vue
-(use-package lsp-vue
-  :ensure t)
 (use-package vue-html-mode
   :ensure t)
 (use-package vue-mode
@@ -565,7 +563,9 @@
     (setq ns-command-modifier 'meta)) ; set command key to be meta instead of option
 
 (when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+    :ensure t
+    :config (exec-path-from-shell-initialize)))
 
 
 ;;; Windows NT
