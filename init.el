@@ -1,4 +1,4 @@
-;;; init.el --- Emacs startup file
+X;;; init.el --- Emacs startup file
 ;;; Commentary:
 
 ;;; Code:
@@ -242,6 +242,11 @@
   :ensure t)
 
 
+;;; Elixir
+(use-package alchemist
+  :ensure t)
+
+
 ;;; F#
 (use-package fsharp-mode
   :ensure t
@@ -320,6 +325,14 @@
   :ensure t)
 
 (use-package pythonic
+  :ensure t)
+
+
+;;; Racket
+(use-package racket-mode
+  :ensure t)
+
+(use-package geiser
   :ensure t)
 
 
@@ -612,17 +625,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company-restclient restclient uuidgen web-mode which-key wc-mode vue-mode utop use-package tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-vue lsp-ui js2-mode fsharp-mode flyspell-correct-ivy flymake-easy fish-mode fish-completion evil elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-edbi company-auctex cider avy-zap aggressive-indent))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
