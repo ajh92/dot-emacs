@@ -36,12 +36,14 @@
 (semantic-mode 1)
 
 (use-package lsp-ui
-  :ensure t)
-
-(use-package which-key
   :ensure t
-  :init (which-key-mode)
-  :config (setq which-key-idle-delay 0.6))
+  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  )
+
+  (use-package which-key
+    :ensure t
+    :init (which-key-mode)
+    :config (setq which-key-idle-delay 0.6))
 
 (use-package multiple-cursors
   :ensure t)
@@ -72,13 +74,23 @@
 	    (setq ispell-program-name
 		  (locate-file "hunspell" exec-path exec-suffixes 'file-executable-p))
 	    (setq ispell-dictionary "american")))
+
 (use-package company
   :ensure t
   :init (global-company-mode)
   :config (progn
 	    (setq company-minimum-prefix-length 2)
 	    (add-hook 'after-init-hook 'global-company-mode)
+	    (define-key company-active-map (kbd "M-n") nil)
+	    (define-key company-active-map (kbd "M-p") nil)
+	    (define-key company-active-map (kbd "C-n") #'company-select-next)
+	    (define-key company-active-map (kbd "C-p") #'company-select-previous)
 	    ))
+
+(use-package company-lsp
+  :ensure t
+  :config (push 'company-lsp company-backends)
+  )
 
 (use-package company-edbi
   :ensure t
@@ -92,6 +104,10 @@
 	    (company-quickhelp-mode 1)
 	    (setq company-quickhelp-delay 0.1)
 	    ))
+
+(use-package company-tern
+  :ensure t
+  :config (add-to-list 'company-backends 'company-tern))
 
 (use-package ivy
   :ensure t
@@ -178,6 +194,8 @@
 
 (put 'narrow-to-region 'disabled nil)
 
+(add-to-list 'auto-mode-alist '("\\.nuspec\\'" . nxml-mode))
+
 ;;; Keybindings
 
 (global-set-key (kbd "C-+") 'expand-region)
@@ -194,9 +212,9 @@
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 
 ;;; Themes
-(use-package monokai-theme
+(use-package alect-themes
   :ensure t
-  :init (load-theme 'monokai t))
+  :init (load-theme 'alect-light-alt t))
 
 (use-package counsel
   :ensure t)
@@ -259,7 +277,11 @@
 ;;; Javascript
 (use-package js2-mode
   :ensure t
-  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  :config (progn
+	    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+	    (add-hook 'js2-mode-hook (lambda () (tern-mode) (company-mode)))
+	    )
+  )
 
 
 ;;; Markdown
@@ -520,12 +542,17 @@
 
 
 ;;; Vue
-(use-package lsp-vue
+(use-package vue-mode
   :ensure t)
 (use-package vue-html-mode
   :ensure t)
-(use-package vue-mode
-  :ensure t)
+(defun vuejs-custom ()
+  (lsp)
+  (lsp-ui-mode)
+  (flycheck-mode t)
+  (company-mode))
+
+(add-hook 'vue-mode-hook 'vuejs-custom)
 
 ;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
@@ -601,8 +628,8 @@
 (if (string-equal system-type "gnu/linux")
     (progn
       (set-face-attribute 'default nil
-			  :family "Inconsolata"
-			  :height 100
+			  :family "Ubuntu Mono"
+			  :height 120
 			  :weight 'normal
 			  :width 'normal)
       (setq elpy-rpc-python-command "python3")
