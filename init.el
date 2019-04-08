@@ -1,4 +1,4 @@
-;;; init.el --- Emacs startup file
+X;;; init.el --- Emacs startup file
 ;;; Commentary:
 
 ;;; Code:
@@ -61,7 +61,9 @@
 (use-package magit
   :ensure t
   :bind(("C-c m" . magit-status))
-  :config (setq magit-completing-read-function 'ivy-completing-read))
+  :config (progn
+	    (setq magit-completing-read-function 'ivy-completing-read)
+	    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)))
 
 (use-package undo-tree
   :ensure t
@@ -258,6 +260,11 @@
   :ensure t)
 
 
+;;; Elixir
+(use-package alchemist
+  :ensure t)
+
+
 ;;; F#
 (use-package fsharp-mode
   :ensure t
@@ -340,6 +347,14 @@
   :ensure t)
 
 (use-package pythonic
+  :ensure t)
+
+
+;;; Racket
+(use-package racket-mode
+  :ensure t)
+
+(use-package geiser
   :ensure t)
 
 
@@ -590,7 +605,9 @@
     (setq ns-command-modifier 'meta)) ; set command key to be meta instead of option
 
 (when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+    :ensure t
+    :config (exec-path-from-shell-initialize)))
 
 
 ;;; Windows NT
