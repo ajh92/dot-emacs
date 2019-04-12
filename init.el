@@ -50,7 +50,7 @@
 
 (use-package avy
   :ensure t
-  :bind ("C-=" . avy-goto-char))
+  :bind ("C-'" . avy-goto-char))
 
 (use-package avy-zap
   :ensure t
@@ -658,3 +658,17 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (free-keys nlinum-relative which-key wc-mode vue-mode uuidgen utop use-package undo-tree tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters racket-mode pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-ui js2-mode hemisu-theme geiser fsharp-mode flyspell-correct-ivy fish-mode fish-completion exec-path-from-shell elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-tern company-lsp company-edbi company-auctex cider basic-mode avy-zap apt-utils all-the-icons alect-themes alchemist aggressive-indent 0blayout))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
