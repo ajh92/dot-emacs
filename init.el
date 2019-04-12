@@ -658,20 +658,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("ab04c00a7e48ad784b52f34aa6bfa1e80d0c3fcacc50e1189af3651013eb0d58" default)))
- '(package-selected-packages
-   (quote
-    (exec-path-from-shell geiser racket-mode alchemist which-key wc-mode vue-mode uuidgen utop use-package undo-tree tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-ui js2-mode hemisu-theme fsharp-mode flyspell-correct-ivy fish-mode fish-completion elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-tern company-lsp company-edbi company-auctex cider basic-mode avy-zap apt-utils all-the-icons alect-themes aggressive-indent 0blayout))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
