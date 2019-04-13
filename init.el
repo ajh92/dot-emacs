@@ -605,8 +605,10 @@
 
 
 ;;; macOS
-(if (string-equal system-type "darwin")
-    (setq ns-command-modifier 'meta)) ; set command key to be meta instead of option
+(when (eq system-type 'darwin) ;; mac specific setting
+  (setq mac-command-modifier 'meta) ;; set command key to be meta instead of option
+  (setq insert-directory-program (executable-find "gls")) ;; use gnu ls (better dired support)
+  )
 
 (when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
