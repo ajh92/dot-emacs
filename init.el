@@ -56,6 +56,17 @@
 	 ("M-Z" . avy-zap-to-char-dwim))
   :config (setq avy-zap-dwim-prefer-avy nil))
 
+(use-package ace-window
+  :ensure t
+  :bind ("M-o" . ace-window)
+  :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package golden-ratio
+  :ensure t
+  :init (golden-ratio-mode 1)
+  :config (progn (setq golden-ratio-auto-scale t)
+		 (add-to-list 'golden-ratio-extra-commands 'ace-window)))
+
 (use-package magit
   :ensure t
   :bind(("C-c m" . magit-status))
@@ -612,17 +623,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company-restclient restclient uuidgen web-mode which-key wc-mode vue-mode utop use-package tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-vue lsp-ui js2-mode fsharp-mode flyspell-correct-ivy flymake-easy fish-mode fish-completion evil elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-edbi company-auctex cider avy-zap aggressive-indent))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
