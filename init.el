@@ -32,18 +32,17 @@
 
 
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 
-(semantic-mode 1)
+(setq-default indent-tabs-mode nil)
 
-(use-package lsp-ui
+(set-face-background 'highlight-indentation-face "#e3e3d3")
+(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+
+(use-package which-key
   :ensure t
-  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  )
-
-  (use-package which-key
-    :ensure t
-    :init (which-key-mode)
-    :config (setq which-key-idle-delay 0.6))
+  :init (which-key-mode)
+  :config (setq which-key-idle-delay 0.6))
 
 (use-package multiple-cursors
   :ensure t)
@@ -58,12 +57,26 @@
 	 ("M-Z" . avy-zap-to-char-dwim))
   :config (setq avy-zap-dwim-prefer-avy nil))
 
+(use-package ace-window
+  :ensure t
+  :bind ("M-o" . ace-window)
+  :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package golden-ratio
+  :ensure t
+  :diminish golden-ratio-mode
+  :init (golden-ratio-mode 1)
+  :config (progn (setq golden-ratio-auto-scale t)
+		 (add-to-list 'golden-ratio-extra-commands 'ace-window)))
+  
+  
 (use-package magit
   :ensure t
   :bind(("C-c m" . magit-status))
   :config (progn
 	    (setq magit-completing-read-function 'ivy-completing-read)
-	    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)))
+	    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+	    (setq magit-clone-set-remote.pushDefault t)))
 
 (use-package undo-tree
   :ensure t
@@ -89,11 +102,6 @@
 	    (define-key company-active-map (kbd "C-p") #'company-select-previous)
 	    ))
 
-(use-package company-lsp
-  :ensure t
-  :config (push 'company-lsp company-backends)
-  )
-
 (use-package company-edbi
   :ensure t
   :config (progn
@@ -110,6 +118,34 @@
 (use-package company-tern
   :ensure t
   :config (add-to-list 'company-backends 'company-tern))
+
+(use-package company-restclient
+  :ensure t
+  :config (add-to-list 'company-backend 'company-restclient))
+
+  (use-package lsp-mode
+    :ensure t
+    :commands lsp
+    :config (setq lsp-prefer-flymake nil))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :config (progn
+	    (setq lsp-ui-doc-position 'at-point)
+	    (setq lsp-ui-flycheck-enable t)
+	    (setq lsp-ui-doc-use-childframe nil)
+	    ))
+
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp
+  :config (push 'company-lsp company-backends))
+
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode)
+  :ensure t)
 
 (use-package ivy
   :ensure t
@@ -128,7 +164,7 @@
   :init (global-flycheck-mode))
 
 (use-package flyspell-correct-ivy
-  :ensure t
+  n  :ensure t
   :after flyspell)
 
 (use-package aggressive-indent
@@ -217,10 +253,10 @@
 ;;; Hippie Expand
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 
-;;; Themes
-(use-package alect-themes
-  :ensure t
-  :init (load-theme 'alect-light-alt t))
+;; ;;; Themes
+;; (use-package moe-theme
+;;   :ensure t
+;;   :init (load-theme 'moe-light t))
 
 (use-package counsel
   :ensure t)
@@ -293,6 +329,13 @@
 	    (add-hook 'js2-mode-hook (lambda () (tern-mode) (company-mode)))
 	    )
   )
+
+(use-package npm-mode
+  :ensure t)
+
+(setq js2-strict-missing-semi-warning nil)
+(setq js2-missing-semi-one-line-override nil)
+(setq js-indent-level 2)
 
 
 ;;; Markdown
@@ -565,13 +608,12 @@
   :ensure t)
 (use-package vue-html-mode
   :ensure t)
-(defun vuejs-custom ()
-  (lsp)
-  (lsp-ui-mode)
-  (flycheck-mode t)
-  (company-mode))
 
-(add-hook 'vue-mode-hook 'vuejs-custom)
+(add-hook 'vue-mode-hook #'lsp)
+
+
+;;; YAML
+(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
 
 ;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
@@ -658,17 +700,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (free-keys nlinum-relative which-key wc-mode vue-mode uuidgen utop use-package undo-tree tuareg tide seeing-is-believing rvm ruby-electric robe realgud rainbow-delimiters racket-mode pythonic projectile powershell nlinum ng2-mode multiple-cursors monokai-theme merlin magit lsp-ui js2-mode hemisu-theme geiser fsharp-mode flyspell-correct-ivy fish-mode fish-completion exec-path-from-shell elpy dockerfile-mode docker-compose-mode docker-api docker counsel company-tern company-lsp company-edbi company-auctex cider basic-mode avy-zap apt-utils all-the-icons alect-themes alchemist aggressive-indent 0blayout))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
