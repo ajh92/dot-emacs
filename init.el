@@ -36,11 +36,11 @@
 
 (setq-default indent-tabs-mode nil)
 
-
-(require 'highlight-indentation)
-(set-face-background 'highlight-indentation-face "#e3e3d3")
-(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-
+(use-package highlight-indentation
+  :ensure t
+  :config (progn (set-face-background 'highlight-indentation-face "#e3e3d3")
+                 (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")))
+  
 (use-package which-key
   :ensure t
   :init (which-key-mode)
@@ -642,7 +642,6 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-(setq flyspell-issue-message-flag nil)
 
 (global-aggressive-indent-mode 1)
 
@@ -703,3 +702,17 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell vue-mode tide company-auctex auctex rvm seeing-is-believing ruby-electric robe geiser racket-mode pythonic elpy powershell utop merlin tuareg npm-mode js2-mode fish-completion fish-mode fsharp-mode alchemist cider ng2-mode counsel wc-mode nlinum realgud dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flycheck rainbow-delimiters yasnippet ivy esh-autosuggest company-lsp lsp-ui lsp-mode company-restclient company-tern company-quickhelp company-edbi company undo-tree magit golden-ratio ace-window avy-zap avy multiple-cursors which-key highlight-indentation use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
