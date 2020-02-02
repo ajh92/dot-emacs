@@ -165,7 +165,7 @@
   :init (global-flycheck-mode))
 
 (use-package flyspell-correct-ivy
-  n  :ensure t
+  :ensure t
   :after flyspell)
 
 (use-package aggressive-indent
@@ -377,6 +377,7 @@
   :ensure t
   :config (progn
 	    (elpy-enable)
+            (setq python-indent-offset 4)
 	    (setq elpy-rpc-backend "jedi")))
 
 (defadvice realgud:pdb (before gud-query-cmdline activate)
@@ -648,8 +649,12 @@
 
 ;;; macOS
 (when (eq system-type 'darwin) ;; mac specific setting
-  (setq mac-command-modifier 'meta) ;; set command key to be meta instead of option
+  (setq mac-option-modifier 'meta)
   (setq insert-directory-program (executable-find "gls")) ;; use gnu ls (better dired support)
+  (setq elpy-rpc-python-command "python3")
+  (setq elpy-shell-echo-output nil)
+  (setq python-shell-interpreter "ipython3"
+        python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i")
   )
 
 (when (memq window-system '(mac ns))
@@ -702,17 +707,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (exec-path-from-shell vue-mode tide company-auctex auctex rvm seeing-is-believing ruby-electric robe geiser racket-mode pythonic elpy powershell utop merlin tuareg npm-mode js2-mode fish-completion fish-mode fsharp-mode alchemist cider ng2-mode counsel wc-mode nlinum realgud dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flycheck rainbow-delimiters yasnippet ivy esh-autosuggest company-lsp lsp-ui lsp-mode company-restclient company-tern company-quickhelp company-edbi company undo-tree magit golden-ratio ace-window avy-zap avy multiple-cursors which-key highlight-indentation use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
