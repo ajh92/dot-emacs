@@ -11,7 +11,6 @@
 (require 'package)
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-			 ("marmalade" . "https://marmalade-repo.org/packages/")
 			 ("melpa" . "https://melpa.org/packages/")
 			 ("elpy" . "https://jorgenschaefer.github.io/packages/")))
 
@@ -36,6 +35,9 @@
 
 (setq-default indent-tabs-mode nil)
 
+(use-package paredit
+  :ensure t)
+
 (use-package highlight-indentation
   :ensure t
   :config (progn (set-face-background 'highlight-indentation-face "#e3e3d3")
@@ -48,6 +50,31 @@
 
 (use-package multiple-cursors
   :ensure t)
+
+
+(use-package reformatter
+  :ensure t
+  :config
+                                        ; Adds a reformatter configuration called "+elixir-format"
+                                        ; This uses "mix format -"
+  (reformatter-define +elixir-format
+                      :program "mix"
+                      :args '("format" "-"))
+                                        ; defines a function that looks for the .formatter.exs file used by mix format
+  (defun +set-default-directory-to-mix-project-root (original-fun &rest args)
+    (if-let* ((mix-project-root (and buffer-file-name
+                                     (locate-dominating-file buffer-file-name
+                                                             ".formatter.exs"))))
+        (let ((default-directory mix-project-root))
+          (apply original-fun args))
+      (apply original-fun args)))
+                                        ; adds an advice to the generated function +elxir-format-region that sets the proper root dir
+                                        ; mix format needs to be run from the root directory otherwise it wont use the formatter configuration
+  (advice-add '+elixir-format-region :around #'+set-default-directory-to-mix-project-root)
+                                        ; Adds a hook to the major-mode that will add the generated function +elixir-format-on-save-mode
+                                        ; So, every time we save an elixir file it will try to find a .formatter.exs and then run mix format from
+                                        ; that file's directory
+  (add-hook 'elixir-mode-hook #'+elixir-format-on-save-mode))
 
 (use-package avy
   :ensure t
@@ -103,12 +130,6 @@
 	    (define-key company-active-map (kbd "C-p") #'company-select-previous)
 	    ))
 
-(use-package company-edbi
-  :ensure t
-  :config (progn
-	    (add-to-list 'company-backends 'company-edbi)
-	    ))
-
 (use-package company-quickhelp
   :ensure t
   :config (progn
@@ -116,18 +137,20 @@
 	    (setq company-quickhelp-delay 0.1)
 	    ))
 
-(use-package company-tern
-  :ensure t
-  :config (add-to-list 'company-backends 'company-tern))
-
 (use-package company-restclient
   :ensure t
   :config (add-to-list 'company-backend 'company-restclient))
 
-  (use-package lsp-mode
-    :ensure t
-    :commands lsp
-    :config (setq lsp-prefer-flymake nil))
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :diminish lsp-mode
+  :config (setq lsp-prefer-flymake nil)
+  :hook
+  (elixir-mode . lsp)
+  :init
+  (add-to-list 'exec-path "/Users/andrew/.elixir-ls/")
+  )
 
 (use-package lsp-ui
   :ensure t
@@ -143,6 +166,12 @@
   :ensure t
   :commands company-lsp
   :config (push 'company-lsp company-backends))
+
+(use-package project
+ :ensure t)
+
+(use-package eglot
+  :ensure t)
 
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode)
@@ -255,12 +284,12 @@
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 
 ;; ;;; Themes
-;; (use-package moe-theme
-;;   :ensure t
-;;   :init (load-theme 'moe-light t))
+(use-package flatui-theme
+  :ensure t
+  :init (load-theme 'flatui t))
 
-(use-package counsel
-  :ensure t)
+  (use-package counsel
+    :ensure t)
 
 (use-package swiper
   :ensure t
@@ -301,17 +330,15 @@
   :ensure t)
 
 
-;;; Elixir
-(use-package alchemist
+(use-package elixir-mode
   :ensure t)
 
 
 ;;; F#
 (use-package fsharp-mode
+  :defer t
   :ensure t
-  :config (progn
-	    (setq inferior-fsharp-program "fsi --readline-")
-	    (setq fsharp-compiler "fsharpc")))
+  :config (require 'eglot-fsharp))
 
 
 ;;; Fish
@@ -649,18 +676,20 @@
 
 ;;; macOS
 (when (eq system-type 'darwin) ;; mac specific setting
+  (use-package exec-path-from-shell
+    :ensure t
+    :config (exec-path-from-shell-initialize))
+  (use-package mac-pseudo-daemon
+    :ensure t)
   (setq mac-option-modifier 'meta)
   (setq insert-directory-program (executable-find "gls")) ;; use gnu ls (better dired support)
   (setq elpy-rpc-python-command "python3")
   (setq elpy-shell-echo-output nil)
   (setq python-shell-interpreter "ipython3"
         python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i")
+  (server-start)
+  (mac-pseudo-daemon-mode)
   )
-
-(when (memq window-system '(mac ns))
-  (use-package exec-path-from-shell
-    :ensure t
-    :config (exec-path-from-shell-initialize)))
 
 
 ;;; Windows NT
