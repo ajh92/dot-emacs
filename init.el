@@ -35,6 +35,19 @@
 
 (setq-default indent-tabs-mode nil)
 
+
+(use-package flyspell-correct
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper))
+  :config (progn (setq ispell-program-name
+                       (locate-file "aspell" exec-path exec-suffixes 'file-executable-p))
+                 (setq ispell-dictionary "en_US")
+                 (setq-default ispell-extra-args '("--sug-mode=ultra"
+                                                   "--camel-case"))))
+
+(use-package flyspell-correct-ivy
+  :after flyspell-correct)
+
 (use-package paredit
   :ensure t)
 
@@ -84,18 +97,10 @@
 	    (setq magit-clone-set-remote.pushDefault t)))
 
 (use-package undo-tree
-  :ensure t
-  :bind ("C-M-/" . undo-tree-redo)
-  :config (global-undo-tree-mode))
+:ensure t
+:bind ("C-M-/" . undo-tree-redo)
+:config (global-undo-tree-mode))
 
-(use-package ispell
-  :ensure t
-  :config (progn
-	    (setq ispell-program-name
-		  (locate-file "aspell" exec-path exec-suffixes 'file-executable-p))
-	    (setq ispell-dictionary "en_US")
-            (setq-default ispell-extra-args '("--sug-mode=ultra"
-                                              "--camel-case"))))
 
 (use-package company
   :ensure t
@@ -145,10 +150,6 @@
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
-
-(use-package flyspell-correct-ivy
-  :ensure t
-  :after flyspell)
 
 (use-package aggressive-indent
   :ensure t)
@@ -626,16 +627,3 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(csharp-mode mac-pseudo-daemon exec-path-from-shell vue-mode tide company-auctex auctex ruby-electric inf-ruby geiser racket-mode pythonic elpy powershell utop merlin tuareg npm-mode js2-mode fish-completion fish-mode fsharp-mode elixir-mode cider counsel flatui-theme wc-mode nlinum realgud edbi dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flyspell-correct-ivy flycheck rainbow-delimiters yasnippet ivy esh-autosuggest eglot company-lsp lsp-ui lsp-mode company-restclient company-quickhelp company undo-tree magit golden-ratio ace-window avy-zap avy multiple-cursors which-key highlight-indentation paredit use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
