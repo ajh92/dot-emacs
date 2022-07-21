@@ -52,6 +52,19 @@
 
 (setq-default indent-tabs-mode nil)
 
+
+(use-package flyspell-correct
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper))
+  :config (progn (setq ispell-program-name
+                       (locate-file "aspell" exec-path exec-suffixes 'file-executable-p))
+                 (setq ispell-dictionary "en_US")
+                 (setq-default ispell-extra-args '("--sug-mode=ultra"
+                                                   "--camel-case"))))
+
+(use-package flyspell-correct-ivy
+  :after flyspell-correct)
+
 (use-package paredit
   :ensure t)
 
@@ -67,31 +80,6 @@
 
 (use-package multiple-cursors
   :ensure t)
-
-
-(use-package reformatter
-  :ensure t
-  :config
-                                        ; Adds a reformatter configuration called "+elixir-format"
-                                        ; This uses "mix format -"
-  (reformatter-define +elixir-format
-                      :program "mix"
-                      :args '("format" "-"))
-                                        ; defines a function that looks for the .formatter.exs file used by mix format
-  (defun +set-default-directory-to-mix-project-root (original-fun &rest args)
-    (if-let* ((mix-project-root (and buffer-file-name
-                                     (locate-dominating-file buffer-file-name
-                                                             ".formatter.exs"))))
-        (let ((default-directory mix-project-root))
-          (apply original-fun args))
-      (apply original-fun args)))
-                                        ; adds an advice to the generated function +elxir-format-region that sets the proper root dir
-                                        ; mix format needs to be run from the root directory otherwise it wont use the formatter configuration
-  (advice-add '+elixir-format-region :around #'+set-default-directory-to-mix-project-root)
-                                        ; Adds a hook to the major-mode that will add the generated function +elixir-format-on-save-mode
-                                        ; So, every time we save an elixir file it will try to find a .formatter.exs and then run mix format from
-                                        ; that file's directory
-  (add-hook 'elixir-mode-hook #'+elixir-format-on-save-mode))
 
 (use-package avy
   :ensure t
@@ -126,9 +114,9 @@
 	    (setq magit-clone-set-remote.pushDefault t)))
 
 (use-package undo-tree
-  :ensure t
-  :bind ("C-M-/" . undo-tree-redo)
-  :config (global-undo-tree-mode))
+:ensure t
+:bind ("C-M-/" . undo-tree-redo)
+:config (global-undo-tree-mode))
 
 (use-package neotree
   :ensure t)
@@ -165,34 +153,8 @@
   :ensure t
   :config (add-to-list 'company-backend 'company-restclient))
 
-(use-package lsp-mode
-  :ensure t
-  :commands lsp
-  :diminish lsp-mode
-  :config (setq lsp-prefer-flymake nil)
-  :hook
-  (elixir-mode . lsp)
-  :init
-  (add-to-list 'exec-path "/Users/andrew/.elixir-ls/")
-  )
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :config (progn
-	    (setq lsp-ui-doc-position 'at-point)
-	    (setq lsp-ui-flycheck-enable t)
-	    (setq lsp-ui-doc-use-childframe nil)
-	    ))
-
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp
-  :config (push 'company-lsp company-backends))
-
 (use-package project
- :ensure t)
+  :ensure t)
 
 (use-package eglot
   :ensure t)
@@ -217,10 +179,6 @@
   :ensure t
   :init (global-flycheck-mode))
 
-(use-package flyspell-correct-ivy
-  :ensure t
-  :after flyspell)
-
 (use-package aggressive-indent
   :ensure t)
 
@@ -234,22 +192,6 @@
   :ensure t)
 
 
-;;; Docker
-(use-package docker
-  :ensure t)
-
-(use-package docker-api
-  :ensure t)
-
-(use-package docker-compose-mode
-  :ensure t)
-
-(use-package docker-tramp
-  :ensure t)
-
-(use-package dockerfile-mode
-  :ensure t)
-
 (use-package edbi
   :ensure t)
 
@@ -340,12 +282,6 @@
     ))
 
 
-
-;;; Angular
-(use-package ng2-mode
-  :ensure t)
-
-
 ;;; Clojure
 (use-package cider
   :ensure t)
@@ -361,8 +297,7 @@
 ;;; F#
 (use-package fsharp-mode
   :defer t
-  :ensure t
-  :config (require 'eglot-fsharp))
+  :ensure t)
 
 (use-package eglot-fsharp
   :defer t
@@ -463,22 +398,11 @@
 
 
 ;;; Ruby
-(use-package robe
-  :ensure t)
-
 (use-package inf-ruby
   :ensure t)
 
 (use-package ruby-electric
   :ensure t)
-
-(use-package seeing-is-believing
-  :ensure t)
-
-(use-package rvm
-  :ensure t)
-
-(rvm-use-default)
 
 (add-to-list 'auto-mode-alist
              '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . ruby-mode))
@@ -629,35 +553,6 @@
       (kill-buffer (current-buffer))))
   (insert (decode-coding-string bibtex-entry 'utf-8))
   (bibtex-fill-entry))
-
-
-;;; Typescript
-(use-package tide
-  :ensure t
-  :config (progn
-	    (defun setup-tide-mode ()
-	      (interactive)
-	      (tide-setup)
-	      (flycheck-mode +1)
-	      (setq flycheck-check-syntax-automatically '(save mode-enabled))
-	      (eldoc-mode +1)
-	      (tide-hl-identifier-mode +1)
-	      ;; company is an optional dependency. You have to
-	      ;; install it separately via package-install
-	      ;; `M-x package-install [ret] company`
-	      (company-mode +1))
-
-	    ;; aligns annotation to the right hand side
-	    (setq company-tooltip-align-annotations t)
-
-	    ;; formats the buffer before saving
-	    (add-hook 'before-save-hook 'tide-format-before-save)
-
-	    (add-hook 'typescript-mode-hook #'setup-tide-mode)
-	    (flycheck-add-mode 'typescript-tslint 'ng2-ts-mode)
-	    (flycheck-add-mode 'typescript-tide 'ng2-ts-mode)
-	    )
-  )
 
 
 ;;; Vue
