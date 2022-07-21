@@ -30,6 +30,23 @@
   )
 
 
+;; re-open scratch buffer when killed
+(defun prepare-scratch-for-kill ()
+  (save-excursion
+    (set-buffer (get-buffer-create "*scratch*"))
+    (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer t)))
+
+(defun kill-scratch-buffer ()
+  (let (kill-buffer-query-functions)
+    (kill-buffer (current-buffer)))
+  ;; no way, *scratch* shall live
+  (prepare-scratch-for-kill)
+  ;; Since we "killed" it, don't let caller try too
+  nil)
+
+(prepare-scratch-for-kill)
+
+
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
@@ -78,7 +95,7 @@
 
 (use-package avy
   :ensure t
-  :bind ("C-'" . avy-goto-char))
+  :bind* ("C-'" . avy-goto-char))
 
 (use-package avy-zap
   :ensure t
@@ -112,6 +129,9 @@
   :ensure t
   :bind ("C-M-/" . undo-tree-redo)
   :config (global-undo-tree-mode))
+
+(use-package neotree
+  :ensure t)
 
 (use-package ispell
   :ensure t
@@ -343,6 +363,10 @@
   :defer t
   :ensure t
   :config (require 'eglot-fsharp))
+
+(use-package eglot-fsharp
+  :defer t
+  :ensure t)
 
 
 ;;; Fish
@@ -709,7 +733,9 @@
 		      :width 'normal)
   (require 'tramp)
   (set-default 'tramp-default-method "plink")
-  (add-to-list 'exec-path "C:/hunspell/bin")
+
+  ;; Caffeine uses F15
+  (define-key special-event-map (kbd "<f15>") 'ignore)
 
   ;; Improve magit performance
   (progn
@@ -740,3 +766,16 @@
 	    python-shell-interpreter-args "-i --simple-prompt")))
 
 (provide 'init)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(tree-sitter-ispell tree-sitter-langs tree-sitter lsp-ivy csharp-mode eglot-fsharp fsharp-eglot ts-comint neotree ejc-sql counsel-ag-popup counsel-jq counsel-projectile npm tern vue-mode tide company-auctex auctex rvm seeing-is-believing ruby-electric robe geiser racket-mode pythonic elpy powershell utop merlin tuareg npm-mode js2-mode fish-completion fish-mode fsharp-mode elixir-mode cider ng2-mode counsel flatui-theme wc-mode nlinum realgud edbi dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flyspell-correct-ivy flycheck rainbow-delimiters yasnippet ivy esh-autosuggest eglot company-lsp lsp-ui lsp-mode company-restclient company-quickhelp company undo-tree magit golden-ratio ace-window avy-zap avy reformatter multiple-cursors which-key highlight-indentation paredit use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
