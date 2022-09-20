@@ -52,7 +52,14 @@
 
 (setq-default indent-tabs-mode nil)
 
-
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (setq treemacs-no-png-images t
+	treemacs-width 24)
+  :bind ("C-c t" . treemacs))
+
 (use-package flyspell-correct
   :after flyspell
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper))
@@ -72,7 +79,7 @@
   :ensure t
   :config (progn (set-face-background 'highlight-indentation-face "#e3e3d3")
                  (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")))
-  
+
 (use-package which-key
   :ensure t
   :init (which-key-mode)
@@ -114,9 +121,12 @@
 	    (setq magit-clone-set-remote.pushDefault t)))
 
 (use-package undo-tree
-:ensure t
-:bind ("C-M-/" . undo-tree-redo)
-:config (global-undo-tree-mode))
+  :ensure t
+  :bind ("C-M-/" . undo-tree-redo)
+  :config (global-undo-tree-mode))
+
+(use-package neotree
+  :ensure t)
 
 (use-package neotree
   :ensure t)
@@ -127,8 +137,7 @@
 	    (setq ispell-program-name
 		  (locate-file "aspell" exec-path exec-suffixes 'file-executable-p))
 	    (setq ispell-dictionary "en_US")
-            (setq-default ispell-extra-args '("--sug-mode=ultra"
-                                              "--camel-case"))))
+            (setq-default ispell-extra-args '("--sug-mode=ultra"))))
 
 (use-package company
   :ensure t
@@ -140,13 +149,14 @@
 	    (define-key company-active-map (kbd "M-p") nil)
 	    (define-key company-active-map (kbd "C-n") #'company-select-next)
 	    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+            (setq company-idle-delay 0)
 	    ))
 
 (use-package company-quickhelp
   :ensure t
   :config (progn
 	    (company-quickhelp-mode 1)
-	    (setq company-quickhelp-delay 0.1)
+	    (setq company-quickhelp-delay 0)
 	    ))
 
 (use-package company-restclient
@@ -157,7 +167,19 @@
   :ensure t)
 
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :defer t
+  :hook (python-mode .eglot-ensure)
+  :config
+  (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+  (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+  (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+  (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+  )
+
+(use-package dap-mode
+  :ensure t
+  :config (dap-auto-configure-mode))
 
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode)
@@ -223,7 +245,6 @@
 (use-package wc-mode
   :ensure t)
 
-
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 (put 'narrow-to-region 'disabled nil)
@@ -254,8 +275,8 @@
   :ensure t
   :init (load-theme 'flatui t))
 
-  (use-package counsel
-    :ensure t)
+(use-package counsel
+  :ensure t)
 
 (use-package swiper
   :ensure t
@@ -277,7 +298,6 @@
     (global-set-key (kbd "C-c j") 'counsel-git-grep)
     (global-set-key (kbd "C-c k") 'counsel-ag)
     (global-set-key (kbd "C-x l") 'counsel-locate)
-    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
 
@@ -346,11 +366,11 @@
 	  (add-hook 'tuareg-mode-hook 'merlin-mode)
 	  (add-hook 'caml-mode-hook 'merlin-mode)))
 
-					; Make company aware of merlin
+;;; Make company aware of merlin
 (with-eval-after-load 'company
   (add-to-list 'company-backends 'merlin-company-backend))
 
-					; Enable company on merlin managed buffers
+;;; Enable company on merlin managed buffers
 (add-hook 'merlin-mode-hook 'company-mode)
 
 (use-package utop
@@ -363,29 +383,47 @@
 
 
 ;;; Python
-(use-package elpy
+(use-package python
   :ensure t
-  :config (progn
-	    (elpy-enable)
-            (setq python-indent-offset 4)
-	    (setq elpy-rpc-backend "jedi")))
+  :config
+  ;; Remove guess indent python message
+  (setq python-indent-guess-indent-offset-verbose nil)
+  ;; Use IPython when available or fall back to regular Python
+  (cond
+   ((executable-find "ipython")
+    (progn
+      (setq python-shell-buffer-name "IPython")
+      (setq python-shell-interpreter "ipython")
+      (setq python-shell-interpreter-args "-i --simple-prompt")))
+   ((executable-find "python3")
+    (setq python-shell-interpreter "python3"))
+   ((executable-find "python2")
+    (setq python-shell-interpreter "python2"))
+   (t
+    (setq python-shell-interpreter "python"))))
 
-(defadvice realgud:pdb (before gud-query-cmdline activate)
-  "Provide a better default command line when called interactively."
-  (interactive
-   (list (gud-query-cmdline (make-symbol "python -m pdb")
-   	 		    (file-name-nondirectory buffer-file-name)))))
 
-(defadvice pdb (before gud-query-cmdline activate)
-  "Provide a better default command line when called interactively."
-  (interactive
-   (list (gud-query-cmdline (make-symbol "python -m pdb")
-   	 		    (file-name-nondirectory buffer-file-name)))))
+(use-package pyvenv
+  :ensure t
+  :defer t
+  :config
+  ;; Setting work on to easily switch between environments
+  (setenv "WORKON_HOME" (expand-file-name "~/.virtualenvs/"))
+  ;; Display virtual envs in the menu bar
+  (setq pyvenv-menu t)
+  ;; Display virtual envs in the menu bar
+  ;; Restart the python process when switching environments
+  (add-hook 'pyvenv-post-activate-hooks (lambda ()
+					  (pyvenv-restart-python)))
+  :hook (python-mode . pyvenv-mode))
 
-(use-package epc
-  :ensure t)
+;; Format the python buffer following YAPF rules
+(use-package yapfify
+  :ensure t
+  :defer t
+  :hook (python-mode . yapf-mode))
 
-(use-package pythonic
+(use-package poetry
   :ensure t)
 
 
@@ -598,7 +636,7 @@
 
 
 ;;; macOS
-(when (eq system-type 'darwin) ;; mac specific setting
+(when (eq system-type 'darwin) ;; mac specific settings
   (use-package exec-path-from-shell
     :ensure t
     :config (exec-path-from-shell-initialize))
@@ -606,10 +644,11 @@
     :ensure t)
   (setq mac-option-modifier 'meta)
   (setq insert-directory-program (executable-find "gls")) ;; use gnu ls (better dired support)
-  (setq elpy-rpc-python-command "python3")
-  (setq elpy-shell-echo-output nil)
-  (setq python-shell-interpreter "ipython3"
-        python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i")
+  (set-face-attribute 'default nil
+		      :family "SF Mono"
+		      :height 130
+		      :weight 'normal
+		      :width 'normal)
   (server-start)
   (mac-pseudo-daemon-mode)
   )
@@ -656,21 +695,6 @@
 			  :height 120
 			  :weight 'normal
 			  :width 'normal)
-      (setq elpy-rpc-python-command "python3")
-      (setq python-shell-interpreter "ipython3"
-	    python-shell-interpreter-args "-i --simple-prompt")))
+      ))
 
 (provide 'init)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(tree-sitter-ispell tree-sitter-langs tree-sitter lsp-ivy csharp-mode eglot-fsharp fsharp-eglot ts-comint neotree ejc-sql counsel-ag-popup counsel-jq counsel-projectile npm tern vue-mode tide company-auctex auctex rvm seeing-is-believing ruby-electric robe geiser racket-mode pythonic elpy powershell utop merlin tuareg npm-mode js2-mode fish-completion fish-mode fsharp-mode elixir-mode cider ng2-mode counsel flatui-theme wc-mode nlinum realgud edbi dockerfile-mode docker-compose-mode docker-api docker popup aggressive-indent flyspell-correct-ivy flycheck rainbow-delimiters yasnippet ivy esh-autosuggest eglot company-lsp lsp-ui lsp-mode company-restclient company-quickhelp company undo-tree magit golden-ratio ace-window avy-zap avy reformatter multiple-cursors which-key highlight-indentation paredit use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
